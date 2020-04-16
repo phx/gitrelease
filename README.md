@@ -14,6 +14,6 @@ This is not just for MacOS though.  It's for anyone with who uses `bash` and `gi
 
 ## Usage:
 
-- Copy somewhere in your `$PATH`
+- Copy `gitrelase` to somewhere in your `$PATH`
 - `gitrelease [VERSION NUMBER] <version name>`
 
