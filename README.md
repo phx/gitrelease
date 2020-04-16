@@ -10,10 +10,17 @@ If you `export CASK=1`, then the last few lines will be formatted perfectly to c
 
 Otherwise, the last few lines will be perfectly formatted to copy/paste into a regular Homebrew formula.
 
-This is not just for MacOS though.  It's for anyone with who uses `bash` and `git` and wants to automatically publish a release on GitHub.
+This is not just for MacOS. It's for anyone with who uses `bash` and `git` and wants to publish a GitHub release from the command line..
 
 ## Usage:
 
 - Copy `gitrelease` to somewhere in your `$PATH`
 - `gitrelease [VERSION NUMBER] <version name>`
 
+```
+##############################################################################
+# Settings > Developer Settings > Personal access tokens > Generate new token
+# git config --global github.token [YOUR_TOKEN]
+# USAGE: ./gitrelease [VERSION_TAG] [RELEASE DESCRIPTION]
+##############################################################################
+```
