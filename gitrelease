@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+##############################################################################
+# Settings > Developer Settings > Personal access tokens > Generate new token
+# git config --global github.token [YOUR_TOKEN]
+# USAGE: ./gitrelease [VERSION_TAG] [RELEASE DESCRIPTION]
+##############################################################################
+
+set -e
+
+# token can also be set by $GITHUB_TOKEN environment variable:
+token=${GITHUB_TOKEN:-$(git config --global github.token)}
+version=$1
+text=$2
+branch=$(git rev-parse --abbrev-ref HEAD)
+repo_full_name=$(git config --get remote.origin.url)
+url=$repo_full_name
+re="^(https|git)(:\/\/|@)([^\/:]+)[\/:]([^\/:]+)\/(.+).git$"
+
+# Prompt user if no environment variable and no token in config:
+if [[ -z $GITHUB_TOKEN ]]; then
+  read -rp 'github token: ' token
+  echo
+fi
+
+if [[ $url =~ $re ]]; then
+  protocol=${BASH_REMATCH[1]}
+  separator=${BASH_REMATCH[2]}
+  hostname=${BASH_REMATCH[3]}
+  user=${BASH_REMATCH[4]}
+  repo=${BASH_REMATCH[5]}
+fi
+
+generate_post_data()
+{
+  cat <<EOF
+{
+  "tag_name": "$version",
+  "target_commitish": "$branch",
+  "name": "$version",
+  "body": "$text",
+  "draft": false,
+  "prerelease": false
+}
+EOF
+}
+
+echo "Create release $version for repo: $repo_full_name branch: $branch"
+curl -skL --data "$(generate_post_data)" "https://api.github.com/repos/$user/$repo/releases?access_token=$token"
+tarball="https://github.com/${user}/${repo}/archive/${version}.tar.gz"
+if [[ $CASK -eq 1 ]]; then
+  echo "  version '${version}'"
+  echo -e "  sha256 \"$(curl -skL "$tarball" | sha256sum | awk '{print $1}')\"\n"
+  echo -e "  url \"${tarball}\""
+else
+  echo -e "\n  url \"${tarball}\""
+  echo -e "  sha256 \"$(curl -skL "$tarball" | sha256sum | awk '{print $1}')\"\n"
+fi
