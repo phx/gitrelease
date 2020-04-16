@@ -10,7 +10,7 @@ If you `export CASK=1`, then the last few lines will be formatted perfectly to c
 
 Otherwise, the last few lines will be perfectly formatted to copy/paste into a regular Homebrew formula.
 
-This is not just for MacOS. It's for anyone with who uses `bash` and `git` and wants to publish a GitHub release from the command line..
+This is not just for MacOS. It's for anyone with who uses `bash` and `git` and wants to publish a cli GitHub release.
 
 ## Usage:
 
